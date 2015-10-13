@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="symfony_application" default="start">
+    <property name="root_dir" value="." override="false"/>
+    <property name="web_dir" value="../public_html" override="false"/>
+    <property name="env" value="dev"/>
+
+    <target name="start" description="Start Release" depends="composer_update,warmup_cache,migrations,create_assets">
+
+    </target>
+
+    <target name="composer_update" description="Installing composer dependencies">
+        <composer composer="${root_dir}/composer.phar"  command="self-update" php="php">
+
+        </composer>
+
+        <composer composer="${root_dir}/composer.phar"  command="install" php="php">
+            <arg value="--working-dir=${root_dir}"/>
+            <arg value="-o"/>
+        </composer>
+    </target>
+
+    <target name="migrations" description="Applying doctrine migrations">
+        <SymfonyConsole console="php ${root_dir}/app/console" command="doctrine:migrations:migrate">
+
+        </SymfonyConsole>
+    </target>
+
+    <target name="create_assets" description="Create assets....">
+        <SymfonyConsole console="php ${root_dir}/app/console" command="assetic:dump ${web_dir}">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+        <SymfonyConsole console="php ${root_dir}/app/console" command="assets:install ${web_dir}">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+    </target>
+
+    <target name="warmup_cache" description="Warmup cache...">
+        <SymfonyConsole console="php ${root_dir}/app/console" command="cache:clear">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+        <SymfonyConsole console="php ${root_dir}/app/console" command="cache:warmup">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+    </target>
+</project>

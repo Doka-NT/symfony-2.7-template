@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {% stylesheets filter="cssrewrite"
+        "bundles/app/bootstrap-3.3.5-dist/css/bootstrap.min.css"
+        "bundles/app/less/style.less" %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body>
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="{{ url('homepage') }}" class="logo"></a>
+            </div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {% javascripts "@AppBundle/Resources/public/js/jquery-2.1.4.min.js" "@AppBundle/Resources/public/bootstrap-3.3.5-dist/js/bootstrap.min.js" %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+</body>
+</html>
